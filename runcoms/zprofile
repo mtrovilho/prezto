@@ -17,8 +17,8 @@ fi
 # Editors
 #
 
-export EDITOR='nano'
-export VISUAL='nano'
+export EDITOR='vim'
+export VISUAL='vim'
 export PAGER='less'
 
 #
@@ -61,3 +61,34 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+#
+# Temporary Files
+#
+
+if [[ ! -d "$TMPDIR" ]]; then
+  export TMPDIR="/tmp/$LOGNAME"
+  mkdir -p -m 700 "$TMPDIR"
+fi
+
+TMPPREFIX="${TMPDIR%/}/zsh"
+
+#
+# GOLANG
+#
+if [[ -d "$HOME/code/gowork" ]]; then
+    export GOPATH="$HOME/code/gowork"
+    path=("$GOPATH/bin" $path)
+fi
+
+#
+# SwiftEnv
+#
+if (( $+commands[swiftenv] )); then
+    if [[ -d "$HOME/.swiftenv" ]]; then
+        export SWIFTENV_ROOT="$HOME/.swiftenv"
+        path=($path "$SWIFTENV_ROOT/bin")
+    fi
+    eval "$(swiftenv init -)"
+fi
+
